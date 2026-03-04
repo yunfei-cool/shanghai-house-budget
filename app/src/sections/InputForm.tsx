@@ -36,9 +36,9 @@ const defaultValues: UserInput = {
   houseType: 'within',          // 外环内
   houseArea: 90,                // 90平米（刚需两房）
   loanYears: 30,                // 默认30年贷款
-  purchaseHorizonMonths: 12,    // 默认12个月后买房
+  purchaseHorizonMonths: 12,    // 默认12个月购房准备期
   renovationCostPerSqm: 4000,   // 默认4000元/㎡
-  emergencyReserveMonths: 6,    // 应急金=6个月生活费（底线15万）
+  emergencyReserveMonths: 6,    // 应急金=6个月生活费（底线3个月收入基数）
   isMultiChild: false,          // 非多子女家庭
   isGreenBuilding: false,       // 非绿色建筑
   hasSupplementaryProvidentFund: false, // 默认无补充公积金
@@ -461,7 +461,7 @@ export function InputForm({ onSubmit }: InputFormProps) {
               onBlur={() => normalizeNumericField('emergencyReserveMonths', 6, 0)}
               className="h-12"
             />
-            <p className="text-xs text-gray-500">应急金=月生活支出×倍数，且不低于15万（默认6倍）</p>
+            <p className="text-xs text-gray-500">应急金=月生活支出×倍数，且不低于3个月收入基数（税后收入+月公积金）</p>
           </div>
           
           <div className="space-y-2">

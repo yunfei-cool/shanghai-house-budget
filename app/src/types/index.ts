@@ -53,6 +53,15 @@ export interface ScenarioResult {
 
 // 计算结果
 export interface CalculationResult {
+  analysisMode: 'standard' | 'low_fund'; // 计算模式：常规/低资金规划
+  lowFundContext: {
+    baselineReserveAtZeroPrice: number; // 0房价成交基线预留（万元）
+    liquidityMargin: number;            // 可用资金 - 基线预留（万元）
+    dynamicTriggerThreshold: number;    // 动态阈值（月生活费+负债月供，万元）
+    isTriggered: boolean;               // 是否触发低资金模式
+    triggerRuleText: string;            // 触发规则说明
+  };
+
   // 区间预算
   budgetRange: {
     safePrice: number;          // 稳健预算（万元）

@@ -14,12 +14,13 @@ const MIN_LOAN_YEARS = 5;
 const MAX_LOAN_YEARS = 30;
 const LIVING_RESERVE_MONTHS = 12;
 const LOAN_BUFFER_MONTHS = 12;
-const MIN_EMERGENCY_RESERVE = 15; // 万元
+const EMERGENCY_INCOME_FLOOR_MONTHS = 3;
 const UPPER_RATIO_INCREMENT = 0.1;
 const UPPER_RATIO_CAP = 0.6;
 const BINARY_SEARCH_STEPS = 60;
 const BINARY_GROWTH_STEPS = 30;
 const INITIAL_PRICE_UPPER_BOUND = 100; // 万元
+const LOW_FUND_TRIGGER_RULE_TEXT = '当可用资金-基线预留 <= 月生活费+负债月供时，进入低资金规划模式。';
 
 interface LoanPlan {
   providentFundLoan: number;
@@ -99,8 +100,15 @@ export function useHouseCalculator(input: UserInput): CalculationResult {
     const gapCapByHorizon = monthlySurplus * purchaseHorizonMonths;
 
     const livingReserve = monthlyExpense * LIVING_RESERVE_MONTHS;
-    const emergencyReserve = Math.max(monthlyExpense * emergencyReserveMonths, MIN_EMERGENCY_RESERVE);
+    const emergencyReserve = Math.max(
+      monthlyExpense * emergencyReserveMonths,
+      incomeBase * EMERGENCY_INCOME_FLOOR_MONTHS
+    );
     const decorationReserve = houseArea * renovationCostPerSqm / 10000;
+    const baselineReserveAtZeroPrice = livingReserve + emergencyReserve + decorationReserve;
+    const liquidityMargin = totalAvailableFunds - baselineReserveAtZeroPrice;
+    const dynamicTriggerThreshold = monthlyExpense + existingDebts;
+    const isLowFundMode = liquidityMargin <= dynamicTriggerThreshold;
 
     const providentFundRate = input.isFirstHome
       ? shanghaiPolicy.providentFund.firstHomeRate
@@ -177,56 +185,56 @@ export function useHouseCalculator(input: UserInput): CalculationResult {
       };
     };
 
+    const createSnapshot = (housePrice: number, loanCapByMonthly: number): ScenarioResult => {
+      const safeHousePrice = Math.max(housePrice, 0);
+      const policyLoanMax = safeHousePrice * (1 - policyMinDownPaymentRatio);
+      const loanTotal = Math.max(Math.min(loanCapByMonthly, policyLoanMax), 0);
+      const loanPlan = resolveLoanPlanByLoanAmount(loanTotal);
+      const downPayment = Math.max(safeHousePrice - loanTotal, 0);
+      const downPaymentRatio = safeHousePrice > 0 ? downPayment / safeHousePrice : 0;
+
+      const taxAndFee = calculateDeedTax(safeHousePrice, houseArea, input.isFirstHome)
+        + calculateAgencyFee(safeHousePrice);
+      const mandatoryReserve = livingReserve + emergencyReserve + decorationReserve + taxAndFee;
+      const immediateCashNeeded = downPayment + mandatoryReserve;
+      const optionalReserve = loanPlan.totalPayment * LOAN_BUFFER_MONTHS;
+      const safetyTargetCashNeeded = immediateCashNeeded + optionalReserve;
+      const immediateGap = immediateCashNeeded - totalAvailableFunds;
+      const safetyGap = safetyTargetCashNeeded - totalAvailableFunds;
+      const monthsToCloseImmediateGap = immediateGap > 0 && monthlySurplus > 0
+        ? Math.ceil(immediateGap / monthlySurplus)
+        : null;
+
+      return {
+        housePrice: safeHousePrice,
+        downPayment,
+        downPaymentRatio,
+        loanTotal,
+        providentFundLoan: loanPlan.providentFundLoan,
+        commercialLoan: loanPlan.commercialLoan,
+        monthlyPayment: loanPlan.totalPayment,
+        immediateCashNeeded,
+        immediateGap,
+        safetyTargetCashNeeded,
+        safetyGap,
+        monthsToCloseImmediateGap,
+        mandatoryReserve,
+        optionalReserve,
+        livingReserve,
+        emergencyReserve,
+        decoration: decorationReserve,
+        taxAndFee,
+        providentFundPayment: loanPlan.providentFundPayment,
+        commercialPayment: loanPlan.commercialPayment
+      };
+    };
+
     const buildScenario = (monthlyCap: number, allowedGap: number): ScenarioResult => {
       const loanCapPlan = resolveLoanPlanByPaymentCap(monthlyCap);
       const loanCapByMonthly = loanCapPlan.totalLoan;
 
-      const createSnapshot = (housePrice: number): ScenarioResult => {
-        const safeHousePrice = Math.max(housePrice, 0);
-        const policyLoanMax = safeHousePrice * (1 - policyMinDownPaymentRatio);
-        const loanTotal = Math.max(Math.min(loanCapByMonthly, policyLoanMax), 0);
-        const loanPlan = resolveLoanPlanByLoanAmount(loanTotal);
-        const downPayment = Math.max(safeHousePrice - loanTotal, 0);
-        const downPaymentRatio = safeHousePrice > 0 ? downPayment / safeHousePrice : 0;
-
-        const taxAndFee = calculateDeedTax(safeHousePrice, houseArea, input.isFirstHome)
-          + calculateAgencyFee(safeHousePrice);
-        const mandatoryReserve = livingReserve + emergencyReserve + decorationReserve + taxAndFee;
-        const immediateCashNeeded = downPayment + mandatoryReserve;
-        const optionalReserve = loanPlan.totalPayment * LOAN_BUFFER_MONTHS;
-        const safetyTargetCashNeeded = immediateCashNeeded + optionalReserve;
-        const immediateGap = immediateCashNeeded - totalAvailableFunds;
-        const safetyGap = safetyTargetCashNeeded - totalAvailableFunds;
-        const monthsToCloseImmediateGap = immediateGap > 0 && monthlySurplus > 0
-          ? Math.ceil(immediateGap / monthlySurplus)
-          : null;
-
-        return {
-          housePrice: safeHousePrice,
-          downPayment,
-          downPaymentRatio,
-          loanTotal,
-          providentFundLoan: loanPlan.providentFundLoan,
-          commercialLoan: loanPlan.commercialLoan,
-          monthlyPayment: loanPlan.totalPayment,
-          immediateCashNeeded,
-          immediateGap,
-          safetyTargetCashNeeded,
-          safetyGap,
-          monthsToCloseImmediateGap,
-          mandatoryReserve,
-          optionalReserve,
-          livingReserve,
-          emergencyReserve,
-          decoration: decorationReserve,
-          taxAndFee,
-          providentFundPayment: loanPlan.providentFundPayment,
-          commercialPayment: loanPlan.commercialPayment
-        };
-      };
-
       const feasible = (housePrice: number): boolean => {
-        const snapshot = createSnapshot(housePrice);
+        const snapshot = createSnapshot(housePrice, loanCapByMonthly);
         return snapshot.immediateCashNeeded <= totalAvailableFunds + allowedGap;
       };
 
@@ -249,11 +257,26 @@ export function useHouseCalculator(input: UserInput): CalculationResult {
         }
       }
 
-      return roundScenario(createSnapshot(low));
+      return roundScenario(createSnapshot(low, loanCapByMonthly));
     };
 
-    const safeScenario = buildScenario(safeMonthlyCap, 0);
-    const upperScenarioCandidate = buildScenario(upperMonthlyCap, gapCapByHorizon);
+    const buildTargetScenario = (monthlyCap: number): ScenarioResult => {
+      const loanCapByMonthly = resolveLoanPlanByPaymentCap(monthlyCap).totalLoan;
+      if (loanCapByMonthly <= 0) {
+        return roundScenario(createSnapshot(0, loanCapByMonthly));
+      }
+
+      const loanableRatio = Math.max(1 - policyMinDownPaymentRatio, 0);
+      const targetHousePrice = loanableRatio > 0 ? loanCapByMonthly / loanableRatio : 0;
+      return roundScenario(createSnapshot(targetHousePrice, loanCapByMonthly));
+    };
+
+    const safeScenario = isLowFundMode
+      ? buildTargetScenario(safeMonthlyCap)
+      : buildScenario(safeMonthlyCap, 0);
+    const upperScenarioCandidate = isLowFundMode
+      ? buildTargetScenario(upperMonthlyCap)
+      : buildScenario(upperMonthlyCap, gapCapByHorizon);
     const upperScenario = upperScenarioCandidate.housePrice >= safeScenario.housePrice
       ? upperScenarioCandidate
       : safeScenario;
@@ -272,6 +295,15 @@ export function useHouseCalculator(input: UserInput): CalculationResult {
     );
 
     return {
+      analysisMode: isLowFundMode ? 'low_fund' : 'standard',
+      lowFundContext: {
+        baselineReserveAtZeroPrice: roundTo2(baselineReserveAtZeroPrice),
+        liquidityMargin: roundTo2(liquidityMargin),
+        dynamicTriggerThreshold: roundTo2(dynamicTriggerThreshold),
+        isTriggered: isLowFundMode,
+        triggerRuleText: LOW_FUND_TRIGGER_RULE_TEXT
+      },
+
       budgetRange: {
         safePrice: safeScenario.housePrice,
         upperPrice: upperScenario.housePrice
