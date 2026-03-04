@@ -65,7 +65,7 @@ export function PolicyInfo() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[560px] text-sm">
               <thead>
                 <tr className="border-b">
                   <th className="text-left py-2 px-2">项目</th>
@@ -102,14 +102,15 @@ export function PolicyInfo() {
               </tbody>
             </table>
           </div>
+          <p className="sm:hidden text-xs text-gray-500 -mt-2">左右滑动查看完整表格</p>
           
           <div className="p-3 bg-yellow-50 rounded-lg">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-gray-700 leading-relaxed">
               <strong>认房不认贷：</strong>只看当前住房套数，不再看历史贷款记录；无房或仅有1套且贷款已结清，仍可按对应政策申请贷款。
             </p>
           </div>
           
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 leading-relaxed">
             <p className="font-medium mb-2">额度上浮政策：</p>
             <ul className="space-y-1 ml-4">
               <li>• 多子女家庭：上浮20%</li>
@@ -129,7 +130,7 @@ export function PolicyInfo() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-3 bg-orange-50 rounded-lg">
               <div className="text-sm text-gray-600 mb-1">首套房最低首付</div>
               <div className="text-2xl font-bold text-orange-600">15%</div>
@@ -163,7 +164,7 @@ export function PolicyInfo() {
           <div>
             <h4 className="font-medium text-gray-900 mb-2">契税</h4>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full min-w-[560px] text-sm">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left py-2 px-2">房屋面积</th>
@@ -185,12 +186,13 @@ export function PolicyInfo() {
                 </tbody>
               </table>
             </div>
+            <p className="sm:hidden text-xs text-gray-500 mt-2">左右滑动查看完整表格</p>
           </div>
           
           <div className="p-3 bg-purple-50 rounded-lg">
             <div className="flex items-start gap-2">
               <Info className="w-4 h-4 text-purple-600 mt-0.5" />
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 leading-relaxed">
                 <p className="font-medium mb-1">中介费</p>
                 <p>一般为房屋总价的<strong>1%-2%</strong>，可根据中介类型和房源热度谈判</p>
               </div>
@@ -200,7 +202,7 @@ export function PolicyInfo() {
           <div className="p-3 bg-gray-50 rounded-lg">
             <div className="flex items-start gap-2">
               <Info className="w-4 h-4 text-gray-600 mt-0.5" />
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 leading-relaxed">
                 <p className="font-medium mb-1">房产税（非沪籍）</p>
                 <p>首套房暂免，二套及以上按家庭总面积人均60㎡免税，超出部分按0.4%-0.6%征收</p>
               </div>

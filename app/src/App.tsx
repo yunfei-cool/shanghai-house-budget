@@ -53,15 +53,15 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto px-4 py-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">上海购房预算分析器</h1>
-                <p className="text-xs text-gray-500">基于2026年2月最新政策口径</p>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900">上海购房预算分析器</h1>
+                <p className="text-[11px] sm:text-xs text-gray-500">基于2026年2月最新政策口径</p>
               </div>
             </div>
           </div>
@@ -69,14 +69,14 @@ function App() {
       </header>
       
       {/* Main Content */}
-      <main className="max-w-3xl mx-auto px-4 py-6">
+      <main className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 py-5 sm:py-6">
         <Tabs defaultValue="calculator" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="calculator" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-2 mb-5 sm:mb-6 h-11">
+            <TabsTrigger value="calculator" className="flex items-center min-h-[44px] gap-1 sm:gap-2 px-2 sm:px-3 text-xs sm:text-sm">
               <Calculator className="w-4 h-4" />
               预算计算器
             </TabsTrigger>
-            <TabsTrigger value="policy" className="flex items-center gap-2">
+            <TabsTrigger value="policy" className="flex items-center min-h-[44px] gap-1 sm:gap-2 px-2 sm:px-3 text-xs sm:text-sm">
               <BookOpen className="w-4 h-4" />
               政策说明
             </TabsTrigger>
@@ -108,7 +108,7 @@ function App() {
       </main>
       
       {/* Footer */}
-      <footer className="max-w-3xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
+      <footer className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 py-5 sm:py-6 text-center text-xs sm:text-sm text-gray-500">
         <p>数据基于2026年2月26日起上海政策口径，仅供参考</p>
         <p className="mt-1">实际贷款额度以银行审批为准</p>
       </footer>

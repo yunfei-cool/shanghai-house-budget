@@ -69,7 +69,7 @@ function HelpLabel({ label, content }: { label: string; content: string }) {
           <TooltipTrigger asChild>
             <button
               type="button"
-              className="text-gray-400 hover:text-gray-600"
+              className="p-1 -m-1 rounded text-gray-400 hover:text-gray-600"
               aria-label={`${label}说明`}
             >
               <HelpCircle className="w-3.5 h-3.5" />
@@ -122,7 +122,7 @@ function ScenarioCard({
       }}
     >
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center justify-between">
+        <CardTitle className="text-base sm:text-lg flex items-center justify-between">
           <span>{title}</span>
           {selected && <span className="text-xs text-blue-600 font-medium">当前查看</span>}
         </CardTitle>
@@ -131,10 +131,10 @@ function ScenarioCard({
       <CardContent className="space-y-3">
         <div className="flex justify-between items-end">
           <span className="text-sm text-gray-600">总价</span>
-          <span className="text-3xl font-bold text-gray-900">{scenario.housePrice.toFixed(0)}万</span>
+          <span className="text-2xl sm:text-3xl font-bold text-gray-900">{scenario.housePrice.toFixed(0)}万</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
           <div className="p-2 rounded bg-white">
             <div className="text-gray-500">首付</div>
             <div className="font-semibold text-gray-900">
@@ -167,7 +167,7 @@ function ScenarioCard({
         </div>
 
         {footnote && (
-          <p className="text-xs text-gray-500 border-t pt-2">
+          <p className="text-xs text-gray-500 border-t pt-2 leading-relaxed break-words">
             {footnote}
           </p>
         )}
@@ -208,25 +208,25 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* 核心结论 */}
       <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">建议购房预算区间</h2>
-            <div className="text-5xl font-bold text-blue-600 mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">建议购房预算区间</h2>
+            <div className="text-3xl sm:text-5xl font-bold text-blue-600 mb-2 leading-tight">
               {result.budgetRange.safePrice.toFixed(0)}
-              <span className="text-2xl text-gray-600 mx-1">~</span>
+              <span className="text-xl sm:text-2xl text-gray-600 mx-1">~</span>
               {result.budgetRange.upperPrice.toFixed(0)}
-              <span className="text-2xl text-gray-600 ml-1">万</span>
+              <span className="text-xl sm:text-2xl text-gray-600 ml-1">万</span>
             </div>
-            <p className="text-gray-600">当前查看：{activeModeText}（点击下方预算卡切换）</p>
+            <p className="text-sm sm:text-base text-gray-600">当前查看：{activeModeText}（点击下方预算卡切换）</p>
           </div>
         </CardContent>
       </Card>
 
       {/* 双档明细 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ScenarioCard
           title="稳健预算"
           subtitle="成交缺口<=0，适合立即执行"
@@ -249,14 +249,14 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
       </div>
 
       {/* 关键指标 */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
               <Wallet className="w-4 h-4 text-blue-600" />
               <span className="text-sm text-gray-600">当前模式月供</span>
             </div>
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">
               {activeScenario.monthlyPayment.toFixed(2)}
               <span className="text-sm text-gray-500 ml-1">万</span>
             </div>
@@ -272,7 +272,7 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
               <Home className="w-4 h-4 text-green-600" />
               <span className="text-sm text-gray-600">当前模式首付</span>
             </div>
-            <div className="text-2xl font-bold text-gray-900">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">
               {activeScenario.downPayment.toFixed(0)}
               <span className="text-sm text-gray-500 ml-1">万</span>
             </div>
@@ -293,7 +293,7 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
                 />
               </span>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{gapText(activeScenario.immediateGap)}</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{gapText(activeScenario.immediateGap)}</div>
             <div className="text-xs text-gray-500 mt-1">
               {activeScenario.immediateGap <= 0
                 ? '可立即成交'
@@ -315,11 +315,11 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
                 />
               </span>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{gapText(activeScenario.safetyGap)}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{gapText(activeScenario.safetyGap)}</div>
+            <div className="text-xs text-gray-500 mt-1 leading-relaxed break-words">
               准备期预计可补金额 {result.gapCapByHorizon.toFixed(0)} 万（月结余 {result.monthlySurplus.toFixed(2)} 万 × 购房准备时长 {input.purchaseHorizonMonths} 个月）
             </div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-gray-500 mt-1 leading-relaxed">
               安全目标达成率 {formatSafetyCoverage(safetyCoverage)}
               {safetyCoverage < 1 ? '（仍需补足安全垫）' : ''}
             </div>
@@ -330,38 +330,38 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
       {/* 贷款方案 */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-blue-600" />
             {activeModeText}贷款方案
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-3 bg-green-50 rounded-lg">
             <div>
               <div className="font-medium text-gray-900">公积金贷款</div>
               <div className="text-sm text-gray-600">利率 {(result.rates.providentFundRate * 100).toFixed(3)}%</div>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right w-full sm:w-auto">
               <div className="font-bold text-gray-900">{activeScenario.providentFundLoan.toFixed(0)}万</div>
               <div className="text-sm text-gray-600">月供 {activeScenario.providentFundPayment.toFixed(2)}万</div>
             </div>
           </div>
 
-          <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-3 bg-blue-50 rounded-lg">
             <div>
               <div className="font-medium text-gray-900">商业贷款</div>
               <div className="text-sm text-gray-600">利率约 {(result.rates.commercialRate * 100).toFixed(2)}%</div>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right w-full sm:w-auto">
               <div className="font-bold text-gray-900">{activeScenario.commercialLoan.toFixed(0)}万</div>
               <div className="text-sm text-gray-600">月供 {activeScenario.commercialPayment.toFixed(2)}万</div>
             </div>
           </div>
 
           <div className="border-t pt-3">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
               <span className="font-medium text-gray-900">总月供</span>
-              <span className="text-xl font-bold text-blue-600">{activeScenario.monthlyPayment.toFixed(2)}万</span>
+              <span className="text-lg sm:text-xl font-bold text-blue-600">{activeScenario.monthlyPayment.toFixed(2)}万</span>
             </div>
             <div className="text-sm text-gray-500 mt-1">贷款年限：{result.monthlyPaymentDetail.loanYears}年</div>
           </div>
@@ -371,43 +371,43 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
       {/* 现金预留分层 */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
             <Wallet className="w-5 h-5 text-orange-600" />
             {activeModeText}现金预留分层
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="rounded-lg border p-3">
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-2">
               <span className="font-medium text-gray-900">成交必需预留</span>
               <span className="font-semibold text-gray-900">{activeScenario.mandatoryReserve.toFixed(0)}万</span>
             </div>
-            <div className="space-y-1 text-sm">
-              <div className="flex justify-between">
+            <div className="space-y-1 text-sm leading-relaxed">
+              <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">12个月生活费</span>
-                <span>{activeScenario.livingReserve.toFixed(1)}万</span>
+                <span className="shrink-0">{activeScenario.livingReserve.toFixed(1)}万</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">应急金（{input.emergencyReserveMonths}个月，底线15万）</span>
-                <span>{activeScenario.emergencyReserve.toFixed(1)}万</span>
+                <span className="shrink-0">{activeScenario.emergencyReserve.toFixed(1)}万</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">装修费用（约{input.renovationCostPerSqm.toFixed(0)}元/㎡）</span>
-                <span>{activeScenario.decoration.toFixed(1)}万</span>
+                <span className="shrink-0">{activeScenario.decoration.toFixed(1)}万</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-start justify-between gap-3">
                 <span className="text-gray-600">税费中介费</span>
-                <span>{activeScenario.taxAndFee.toFixed(1)}万</span>
+                <span className="shrink-0">{activeScenario.taxAndFee.toFixed(1)}万</span>
               </div>
             </div>
           </div>
 
           <div className="rounded-lg border p-3 bg-blue-50/40">
-            <div className="flex justify-between items-center mb-1">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-1">
               <span className="font-medium text-gray-900">安全目标预留（可选）</span>
               <span className="font-semibold text-gray-900">{activeScenario.optionalReserve.toFixed(0)}万</span>
             </div>
-            <div className="text-sm text-gray-600">按1年还贷缓冲金测算，不作为成交硬门槛</div>
+            <div className="text-sm text-gray-600 leading-relaxed">按1年还贷缓冲金测算，不作为成交硬门槛</div>
           </div>
         </CardContent>
       </Card>
@@ -415,12 +415,12 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
       {/* 计算逻辑说明报告 */}
       <Card className="bg-gray-50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
             <Info className="w-5 h-5 text-blue-600" />
             计算逻辑说明报告
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3 text-sm text-gray-700">
+        <CardContent className="space-y-3 text-sm text-gray-700 leading-relaxed break-words">
           <div>
             1. 月供上限：
             <code className="ml-1">（税后收入+月公积金）×风险比例 - 现有负债月供</code>
@@ -455,7 +455,7 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
       {/* 压力测试 */}
       <Card className="border-yellow-200">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center gap-2">
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-yellow-600" />
             压力测试（基于{activeModeText}）
           </CardTitle>
@@ -483,7 +483,7 @@ export function ResultView({ result, input, onReset }: ResultViewProps) {
       <Button
         onClick={onReset}
         variant="outline"
-        className="w-full h-12"
+        className="w-full h-11 sm:h-12"
       >
         重新计算
       </Button>

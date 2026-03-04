@@ -94,7 +94,7 @@ export function InputForm({ onSubmit }: InputFormProps) {
   };
 
   const riskCardClass = (selected: boolean) => {
-    const base = 'border rounded-lg p-3 cursor-pointer transition-colors';
+    const base = 'border rounded-lg p-3 cursor-pointer transition-colors min-h-[72px] flex flex-col justify-center';
     return selected
       ? `${base} border-blue-500 bg-blue-50`
       : `${base} hover:border-blue-500`;
@@ -140,13 +140,13 @@ export function InputForm({ onSubmit }: InputFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* 收入信息 */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-4">
           <DollarSign className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">收入与资产</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">收入与资产</h3>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="monthlyIncome">税后月收入（万元）</Label>
@@ -280,10 +280,10 @@ export function InputForm({ onSubmit }: InputFormProps) {
       </div>
       
       {/* 购房信息 */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-4">
           <Home className="w-5 h-5 text-green-600" />
-          <h3 className="text-lg font-semibold text-gray-900">购房信息</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">购房信息</h3>
         </div>
         
         <div className="space-y-4">
@@ -303,13 +303,13 @@ export function InputForm({ onSubmit }: InputFormProps) {
             <RadioGroup
               value={formData.houseType}
               onValueChange={(value) => updateField('houseType', value as 'within' | 'outside')}
-              className="flex gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
                 <RadioGroupItem value="within" id="within" />
                 <Label htmlFor="within" className="cursor-pointer">外环内</Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
                 <RadioGroupItem value="outside" id="outside" />
                 <Label htmlFor="outside" className="cursor-pointer">外环外</Label>
               </div>
@@ -317,7 +317,7 @@ export function InputForm({ onSubmit }: InputFormProps) {
             <p className="text-xs text-gray-500">外环外首付比例可能更低，但需考虑通勤成本</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="houseArea">房屋面积（平方米）</Label>
@@ -392,7 +392,7 @@ export function InputForm({ onSubmit }: InputFormProps) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4">
             <div className="flex items-center gap-2">
               <Checkbox
                 id="isMultiChild"
@@ -428,10 +428,10 @@ export function InputForm({ onSubmit }: InputFormProps) {
       </div>
       
       {/* 支出与风险 */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-4">
           <Shield className="w-5 h-5 text-orange-600" />
-          <h3 className="text-lg font-semibold text-gray-900">支出与风险承受</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">支出与风险承受</h3>
         </div>
         
         <div className="space-y-4">
@@ -466,7 +466,7 @@ export function InputForm({ onSubmit }: InputFormProps) {
           
           <div className="space-y-2">
             <Label>风险偏好</Label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button
                 type="button"
                 aria-pressed={formData.riskPreference === 'conservative'}
@@ -503,7 +503,7 @@ export function InputForm({ onSubmit }: InputFormProps) {
       {/* 提交按钮 */}
       <Button
         type="submit"
-        className="w-full h-14 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+        className="w-full h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
       >
         开始分析
       </Button>

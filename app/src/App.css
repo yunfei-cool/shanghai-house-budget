@@ -92,13 +92,6 @@ input[type="number"] {
   z-index: 100;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Print styles */
 @media print {
   header,
